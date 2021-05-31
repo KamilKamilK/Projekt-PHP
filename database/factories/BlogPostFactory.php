@@ -34,6 +34,5 @@ class BlogPostFactory extends Factory
                'title' => 'New title',
                'content' => 'Content of the blog post'
            ]);
-
     }
-}
+    }

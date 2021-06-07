@@ -60,7 +60,7 @@ class PostTest extends TestCase
 
         $params = [
             'title' => 'Valid title',
-            'content' => 'At leats 10 characters'
+            'content' => 'At least 10 characters'
         ];
 
         $this->actingAs($this->user())
@@ -116,15 +116,17 @@ class PostTest extends TestCase
     {
         $post = $this->createDummyBlogPost();
 
-//        $this->assertDatabaseHas('blog_posts', $post->toArray());
+        $this->assertDatabaseHas('blog_posts', $post->toArray());
 
-        $this->actingAs($this->user())
+       $this->actingAs($this->user())
             ->delete("/posts/{$post->id}")
             ->assertStatus(302)
             ->assertSessionHas('status');
 
+
         $this->assertEquals(session('status'), 'Blog post was deleted!');
-        $this->assertDatabaseMissing('blog_posts', $post->toArray());
+//        $this->assertDatabaseMissing('blog_posts', $post->toArray());
+        $this->assertSoftDeleted('blog_posts', $post->toArray());
 
 
     }

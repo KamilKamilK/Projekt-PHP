@@ -35,8 +35,8 @@ class UserFactory extends Factory
     {
         return $this->state([
 
-            'name' => 'John Doe',
-            'email' => 'john@laravel.test',
+            'name' => 'Kamil',
+            'email' => 'kamil@kamil.com',
         ]);
     }
 }

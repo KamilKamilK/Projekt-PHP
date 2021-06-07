@@ -3,7 +3,9 @@
 namespace Database\Factories;
 
 use App\Models\BlogPost;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Auth;
 
 class BlogPostFactory extends Factory
 {
@@ -29,10 +31,13 @@ class BlogPostFactory extends Factory
 
     public function newTitle()
     {
+
+
         return $this->state([
 
                'title' => 'New title',
-               'content' => 'Content of the blog post'
+               'content' => 'Content of the blog post',
+                'user_id'=> 1
            ]);
     }
     }

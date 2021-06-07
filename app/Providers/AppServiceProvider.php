@@ -25,5 +25,10 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Schema::defaultStringLength(191);
+
+        if(config('database.default') == 'sqlite_testing') {
+            $db = app()->make('db');
+            $db->connection()->getPdo()->exec("pragma foreign_keys=1");
+        }
     }
 }

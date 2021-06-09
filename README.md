@@ -10,6 +10,12 @@ W projekcie można swobotnie dodawać, usuwać oraz edytować wprowadzone posty,
 
 Projekt powstał w czasie wolnym. Głównym celem jest przetestowanie funcji i możliwości jakie daje Laravel 8 w praktyce.
 
+WAŻNE!!!
+Dostęp do edytowania, usuwania postów został zabezpieczony i tylko zarejestrowana osoba z uprawnieniami admina może sobie na to pozwolić.
+Po wpisaniu komendy $ php artisan db:seed można skorzystać z konta z uprawnieniami admina
+email: kamil@kamil.com
+hasło: password
+
 ### Wykorzystane technologie  
 
 - Php v. 7.4.9

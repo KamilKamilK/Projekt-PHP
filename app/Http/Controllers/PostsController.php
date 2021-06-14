@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -79,6 +80,7 @@ class PostsController extends Controller
 //        $post->save();
 
 
+
         $request->session()->flash('status', 'The blog post was created!');
         return redirect()->route('posts.show', ['post' => $post->id]);
     }
@@ -112,7 +114,7 @@ class PostsController extends Controller
 //        });
         $this->authorize($post);// <- zamiast Gate::denies
 
-        return view('update', ['post' => BlogPost::findOrFail($id)]);
+        return view('posts.edit', ['post' => BlogPost::findOrFail($id)]);
     }
 
     /**

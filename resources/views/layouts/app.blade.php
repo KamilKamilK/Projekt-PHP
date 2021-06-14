@@ -33,6 +33,7 @@
             style="display: none">
                 @csrf
             </form>
+
         @endguest
     </nav>
 </div>

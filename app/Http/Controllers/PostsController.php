@@ -48,7 +48,14 @@ class PostsController extends Controller
 
         //comments_count
 
-        return view('posts.index', ['posts' => BlogPost::withCount('comments')->with('user')->get()]);
+
+        return view('posts.index',
+            [
+                'posts' => BlogPost::latest()->withCount('comments')->with('user')->get(),
+                'mostCommented' => BlogPost::mostCommented()->take(5)->get(),
+                'mostActive'=>User::withMostBlogPosts()->take(5)->get(),
+            ]
+        );
     }
 
     /**
@@ -71,6 +78,7 @@ class PostsController extends Controller
     public function store(StorePost $request)
     {
         $validated = $request->validated();
+        $validated['user_id'] = $request->user()->id;
         $post = BlogPost::create($validated);
 
 
@@ -78,7 +86,6 @@ class PostsController extends Controller
 //        $post->title = $validated['title'];
 //        $post->content = $validated['content'];
 //        $post->save();
-
 
 
         $request->session()->flash('status', 'The blog post was created!');
@@ -94,9 +101,16 @@ class PostsController extends Controller
     public function show($id)
     {
 //        abort_if(!isset($this->posts[$id]), 404);
-
+        /**
+         * zwrócenie blogpost z komentarzami w kolejności created_at. wykorzystanie local scope
+         */
+//        return view('posts.show', [
+//            'post' => BlogPost::with(['comments'=> function($query){
+//                return $query->latest();
+//            }])->findOrFail($id)]);
         return view('posts.show', [
             'post' => BlogPost::with('comments')->findOrFail($id)]);
+
     }
 
     /**

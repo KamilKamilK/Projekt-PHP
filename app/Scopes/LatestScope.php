@@ -9,6 +9,7 @@ class LatestScope implements Scope
 
 {
     public function apply(Builder $builder, Model $model)
+        //global query scope
     {
         $builder->orderBy($model::CREATED_AT,'desc');
     }

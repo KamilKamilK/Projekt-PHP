@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 
@@ -26,9 +27,9 @@ class AppServiceProvider extends ServiceProvider
     {
         Schema::defaultStringLength(191);
 
-        if(config('database.default') == 'sqlite_testing') {
-            $db = app()->make('db');
-            $db->connection()->getPdo()->exec("pragma foreign_keys=1");
-        }
+        Blade::aliasComponent('components.badge', 'badge');
+        Blade::aliasComponent('components.updated', 'updated');
+        Blade::aliasComponent('components.card', 'card');
+
     }
 }

@@ -10,6 +10,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -31,30 +32,24 @@ class PostsController extends Controller
      */
     public function index()
     {
-//        DB::connection()->enableQueryLog();
-//
-//        $posts = BlogPost::with('comments')->get();
-//
-//        foreach ($posts as $post){
-//           foreach($post->comments as $comment){
-//               echo $comment->content;
-//           }
-//    }
-//        dd(DB::getQueryLog());
+        $mostCommented = Cache::remember('blog-post-commented', 60,function (){
+            return BlogPost::mostCommented()->take(5)->get();
+        });
 
-//        $posts = BlogPost::withCount(['comments', 'comments as new_comments' => function($query){
-//            $query->where('created_at', '>=', '2021-04-21 10:47:07');
-//        }])->get();
+        $mostActive = Cache::remember('users-most-active',60,function (){
+            return User::withMostBlogPosts()->take(5)->get();
+        });
 
-        //comments_count
-
+        $mostActiveLastMonth = Cache::remember('users-most-active-last-month', 60,function (){
+            return User::withMostBlogPostsLastMonth()->take(5)->get();
+        });
 
         return view('posts.index',
             [
                 'posts' => BlogPost::latest()->withCount('comments')->with('user')->get(),
-                'mostCommented' => BlogPost::mostCommented()->take(5)->get(),
-                'mostActive'=>User::withMostBlogPosts()->take(5)->get(),
-                'mostActiveLastMonth'=>User::withMostBlogPostsLastMonth()->take(5)->get(),
+                'mostCommented' => $mostCommented,
+                'mostActive'=> $mostActive,
+                'mostActiveLastMonth'=> $mostActiveLastMonth,
             ]
         );
     }
@@ -109,8 +104,13 @@ class PostsController extends Controller
 //            'post' => BlogPost::with(['comments'=> function($query){
 //                return $query->latest();
 //            }])->findOrFail($id)]);
+
+        $blogPost = Cache::remember('blog-post-{$id}',60,function () use ($id){
+            return BlogPost::with('comments')->findOrFail($id);
+        });
         return view('posts.show', [
-            'post' => BlogPost::with('comments')->findOrFail($id)]);
+            'post' => $blogPost
+        ]);
 
     }
 
